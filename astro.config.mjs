@@ -1,10 +1,10 @@
-import { defineConfig } from 'astro/config';
-import tailwind from '@astrojs/tailwind';
-import { remarkReadingTime } from './src/utils/readingTime';
-import rehypePrettyCode from 'rehype-pretty-code';
-import vercelStatic from '@astrojs/vercel/static';
 import react from '@astrojs/react';
-import sitemap from "@astrojs/sitemap";
+import sitemap from '@astrojs/sitemap';
+import tailwind from '@astrojs/tailwind';
+import { defineConfig } from 'astro/config';
+import rehypePrettyCode from 'rehype-pretty-code';
+import { remarkReadingTime } from './src/utils/readingTime';
+import netlify from "@astrojs/netlify";
 const options = {
   // Specify the theme to use or a custom theme json, in our case
   // it will be a moonlight-II theme from
@@ -30,18 +30,14 @@ const options = {
 
 // https://astro.build/config
 export default defineConfig({
-	site: 'https://astro-tech-blog-ten.vercel.app/',
-	markdown: {
-		syntaxHighlight: false,
-		// Disable syntax built-in syntax hightlighting from astro
-		rehypePlugins: [[rehypePrettyCode, options]],
-		remarkPlugins: [remarkReadingTime]
-	},
-	integrations: [tailwind(), react(), sitemap()],
-	output: 'static',
-	adapter: vercelStatic({
-		webAnalytics: {
-			enabled: true
-		}
-	})
+  site: 'https://alangomes.dev/',
+  markdown: {
+    syntaxHighlight: false,
+    // Disable syntax built-in syntax hightlighting from astro
+    rehypePlugins: [[rehypePrettyCode, options]],
+    remarkPlugins: [remarkReadingTime]
+  },
+  integrations: [tailwind(), react(), sitemap()],
+  output: 'static',
+  adapter: netlify()
 });

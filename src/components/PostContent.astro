@@ -19,6 +19,7 @@ import Section from './Section.astro';
 
 	.content code {
 		overflow-x: auto;
+		tab-size: 1rem;
 	}
 
 	.content [data-rehype-pretty-code-figure] code {
@@ -63,19 +64,6 @@ import Section from './Section.astro';
 	.content pre > code > span[data-line]::before {
 		content: '';
 		display: inline-block;
-		width: 1rem;
 		text-align: right;
-	}
-
-	/** 
-     *  we'll need to adjust the space required 
-     *  the number depending on the number of digits 
-     */
-	.content pre > code[data-line-numbers-max-digits='2'] > span[data-line]::before {
-		width: 2rem;
-	}
-
-	.content code[data-line-numbers-max-digits='3'] > span[data-line]::before {
-		width: 3rem;
 	}
 </style>
