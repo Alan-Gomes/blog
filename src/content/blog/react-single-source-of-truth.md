@@ -1,13 +1,8 @@
 ---
-layout: ../../layouts/post.astro
-title: 'Aplicando o conceito Single Source of Truth em componentes React'
+title: 'Single Source of Truth em componentes React'
 pubDate: 2024-05-05
 description: 'Como escrever componentes mais fáceis de manter e mais simples de entender.'
-author: 'Alan Gomes'
-excerpt: Neste artigo irei explicar o que é _Single Source of Truth_ e como ele pode ser utilizado para prevenir possíveis bugs e ainda melhorar a legibilidade dos seus componentes.
-image:
-  src:
-  alt:
+excerpt: Neste artigo irei explicar o que é Single Source of Truth e como ele pode ser utilizado para prevenir possíveis bugs e ainda melhorar a legibilidade dos seus componentes.
 tags: ['react', 'javascript', 'typescript', 'patterns']
 ---
 
@@ -24,7 +19,7 @@ _Single Source of Truth_ (ou SSOT) é uma prática de estruturar as informaçõe
 O primeiro passo para entender o SSOT é saber o que é e como desenvolver estados centralizados. Para compreender melhor o conceito aplicado no contexto de componentes React, vamos primeiro dar uma olhada no exemplo abaixo:
 
 ```tsx showLineNumbers {3-4}
-const fruits = [/*...*/];
+const fruits = [];
 function FruitList() {
 	const [query, setQuery] = useState('');
 	const [filteredFruits, setFilteredFruits] = useState(fruits);
@@ -55,15 +50,15 @@ O componente `FruitList` possui dois estados: `query` e `filteredFruits`. O prim
 
 Vamos fazer um ajuste no componente e adicionar um botão para limpar a pesquisa. Uma funcionalidade relativamente simples:
 
-```tsx showLineNumbers {11-13,24}
-const fruits = [/*...*/];
+```tsx showLineNumbers collapse={3-9, 16-23, 25-28} ins={11-13,24}
+const fruits = [];
 function FruitList() {
 	const [query, setQuery] = useState('');
 	const [filteredFruits, setFilteredFruits] = useState(fruits);
 
 	const filter = (newQuery: string) => {
 		setQuery(newQuery);
-		setFilteredFruits(fruits.filter(fruit => !query || fruit.name.includes(query)));
+		setFilteredFruits(fruits.filter((fruit) => !query || fruit.name.includes(query)));
 	};
 
 	const clear = () => {
@@ -80,7 +75,9 @@ function FruitList() {
 				}}
 			/>
 			<button onClick={clear}>limpar</button>
-			{fruits.map(fruit => <Fruit key={fruit.id} fruit={fruit}>)}
+			{fruits.map((fruit) => (
+				<Fruit key={fruit.id} fruit={fruit} />
+			))}
 		</>
 	);
 }
@@ -96,21 +93,37 @@ Todas essas abordagens seguem o caminho de tentar sincronizar os estados `query`
 
 Vamos analisar outro exemplo do mesmo componente com o código refatorado, restando apenas um estado que é a fonte única da verdade:
 
-```tsx showLineNumbers {4,7}
-const fruits = [/*...*/];
+```tsx showLineNumbers collapse={12-30} del={4,9} ins={5}
+const fruits = [];
 function FruitList() {
 	const [query, setQuery] = useState('');
-	const filteredFruits = fruits.filter(fruit => !query || fruit.name.includes(query));
+	const [filteredFruits, setFilteredFruits] = useState(fruits);
+	const filteredFruits = fruits.filter((fruit) => !query || fruit.name.includes(query));
 
 	const filter = (newQuery: string) => {
 		setQuery(newQuery);
+		setFilteredFruits(fruits.filter((fruit) => !query || fruit.name.includes(query)));
 	};
 
 	const clear = () => {
 		setQuery('');
 	};
 
-	return (/* omitido por brevidade */);
+	return (
+		<>
+			<input
+				value={query}
+				onChange={(event) => {
+					const newValue = event.target.value;
+					filter(newValue);
+				}}
+			/>
+			<button onClick={clear}>limpar</button>
+			{fruits.map((fruit) => (
+				<Fruit key={fruit.id} fruit={fruit} />
+			))}
+		</>
+	);
 }
 ```
 
@@ -130,7 +143,7 @@ O conceito SSOT não se limita apenas a um componente, você pode e deve pensar 
 
 A abordagem mais prática é simplesmente passar o estado via props. O componente pai possui o estado e fornece o valor atual via prop para os componentes filhos. Os componentes filhos, por sua vez, chamam callbacks para comunicar que desejam atualizar o valor do estado e o componente pai processa a solicitação.
 
-```tsx
+```tsx /\w+={\w+} \w+={\w+}/ /{ \w+, \w+ }/
 function FruitList() {
 	const [query, setQuery] = useState('');
 
@@ -140,7 +153,7 @@ function FruitList() {
 
 	return (
 		<>
-			<SearchBox value={query} onChange={filter} />
+			<SearchBox query={query} onChange={filter} />
 			{/* omitido por brevidade */}
 		</>
 	);
@@ -175,19 +188,14 @@ Alguns pontos negativos:
 
 Existe outra abordagem que mitiga os pontos negativos de passar o estado através de props, utilizando contexto do React. O contexto pode ser utilizado para transmitir o valor de um estado com toda a árvore de componentes filhos, mantendo os mesmos sincronizados.
 
-```tsx
+```tsx {1, 13} /(</?\w+.\w+( \w+={\w+})?>)/
 const ThemeContext = createContext<'dark' | 'light'>('light');
 function FruitList() {
 	const [theme, setTheme] = useState('light');
 
-	const toggle = () => {
-		setTheme(theme === 'dark' ? 'dark' : 'light');
-	};
-
 	return (
 		<ThemeContext.Provider value={theme}>
 			<Header />
-			{/* omitido por brevidade */}
 		</ThemeContext.Provider>
 	);
 }
@@ -233,7 +241,7 @@ Em componentes mais especializados ou quando o estado é externo, é recomendado
 const [query, setQuery] = useState('');
 
 // o componente SearchBox recebe o estado diretamente via props
-return <SearchBox value={query} onChange={setQuery} >;
+return <SearchBox value={query} onChange={setQuery} />;
 ```
 
 Mas como nada é preto no branco, existem situações onde ambas as abordagens possam ser aplicadas:

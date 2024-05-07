@@ -1,0 +1,35 @@
+---
+import PostContent from '@/components/PostContent.astro';
+import PostHeader from '@/components/PostHeader.astro';
+import Base from '@/layouts/Base.astro';
+import { AppConfig } from '@/utils/AppConfig';
+import { getCollection } from 'astro:content';
+
+// 1. Generate a new path for every collection entry
+export async function getStaticPaths() {
+	const blogEntries = await getCollection('blog');
+	return blogEntries.map((entry) => ({
+		params: { slug: entry.slug },
+		props: { entry }
+	}));
+}
+
+const { description } = AppConfig;
+
+const { entry } = Astro.props;
+const metadata = entry.data;
+const { Content, remarkPluginFrontmatter } = await entry.render();
+---
+
+<Base head={{ title: metadata.title, description }}>
+	<div class="mx-auto w-full max-w-screen-md">
+		<PostHeader
+			title={metadata.title}
+			tags={metadata.tags}
+			minutesRead={remarkPluginFrontmatter.minutesRead}
+			pubDate={new Date(remarkPluginFrontmatter.pubDate)}
+			img={metadata.image && { src: metadata.image?.src, alt: metadata.image?.alt }}
+		/>
+		<PostContent><Content /></PostContent>
+	</div>
+</Base>

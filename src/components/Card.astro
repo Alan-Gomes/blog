@@ -1,14 +1,17 @@
 ---
 import { formatDate } from '@/utils/data.util';
+import { CollectionEntry } from 'astro:content';
 import Tags from './Tags.astro';
 interface Props {
-	post: any;
+	post: CollectionEntry<'blog'>;
 }
 
 const { post } = Astro.props;
+
+const { remarkPluginFrontmatter } = await post.render();
 ---
 
-<a href={post.url}>
+<a href={`/posts/${post.slug}`}>
 	<div
 		class="h-full rounded-2xl bg-stone-200/50 from-orange-900 via-amber-700 to-white p-[1px] text-sm shadow-[inset_0_0_0_1px_rgba(255,255,255,0.4)] hover:bg-gradient-to-r dark:bg-gray-900"
 	>
@@ -25,16 +28,16 @@ const { post } = Astro.props;
 		>
 			<div class="flex-auto">
 				<div class="flex justify-between pb-4 text-xs">
-					<p>{formatDate(post.frontmatter.pubDate)}</p>
-					<p>{post.frontmatter.minutesRead}</p>
+					<p>{formatDate(post.data.pubDate)}</p>
+					<p>{remarkPluginFrontmatter.minutesRead}</p>
 				</div>
 
-				<p class="pb-4 text-lg font-bold">{post.frontmatter.title}</p>
+				<p class="pb-4 text-lg font-bold">{post.data.title}</p>
 
-				<Tags tags={post.frontmatter.tags} />
-				<p class="line-clamp-6 pt-4">{post.frontmatter.excerpt}</p>
+				<Tags tags={post.data.tags} />
+				<p class="line-clamp-6 pt-4">{post.data.excerpt}</p>
 			</div>
-			<p class="pt-4 underline">read more →</p>
+			<p class="pt-4 underline">leia mais →</p>
 		</div>
 	</div>
 </a>

@@ -1,3 +1,5 @@
+import defaultTheme from 'tailwindcss/defaultTheme';
+
 const disabledCss = {
 	'code::before': false,
 	'code::after': false,
@@ -20,6 +22,9 @@ export default {
 				lg: { css: disabledCss },
 				xl: { css: disabledCss },
 				'2xl': { css: disabledCss }
+			},
+			fontFamily: {
+				mono: ['iA Writer Mono', ...defaultTheme.fontFamily.mono]
 			}
 		}
 	},

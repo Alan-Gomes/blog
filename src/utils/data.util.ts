@@ -1,6 +1,6 @@
-import { MarkdownInstance } from 'astro';
+import { CollectionEntry } from 'astro:content';
 
-export const formatDate = (pubDate: string) => {
+export const formatDate = (pubDate: Date) => {
 	var options: Intl.DateTimeFormatOptions = {
 		year: 'numeric',
 		month: 'short',
@@ -8,12 +8,12 @@ export const formatDate = (pubDate: string) => {
 		timeZone: 'UTC'
 	};
 
-	return new Date(pubDate).toLocaleDateString('pt-BR', options);
+	return pubDate.toLocaleDateString('pt-BR', options);
 };
 
-export const sortPostsByDate = (a: MarkdownInstance<any>, b: MarkdownInstance<any>) => {
-	const pubDateA = new Date(a.frontmatter.pubDate);
-	const pubDateB = new Date(b.frontmatter.pubDate);
+export const sortPostsByDate = (a: CollectionEntry<'blog'>, b: CollectionEntry<'blog'>) => {
+	const pubDateA = new Date(a.data.pubDate);
+	const pubDateB = new Date(b.data.pubDate);
 	if (pubDateA < pubDateB) {
 		return 1;
 	}
