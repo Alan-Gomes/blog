@@ -3,7 +3,6 @@ import Comments from '@/components/Comments.astro';
 import PostContent from '@/components/PostContent.astro';
 import PostHeader from '@/components/PostHeader.astro';
 import Base from '@/layouts/Base.astro';
-import { AppConfig } from '@/utils/AppConfig';
 import { getCollection } from 'astro:content';
 
 // 1. Generate a new path for every collection entry
@@ -15,14 +14,18 @@ export async function getStaticPaths() {
 	}));
 }
 
-const { description } = AppConfig;
-
 const { entry } = Astro.props;
 const metadata = entry.data;
 const { Content, remarkPluginFrontmatter } = await entry.render();
 ---
 
-<Base head={{ title: metadata.title, description }}>
+<Base
+	head={{
+		title: metadata.title,
+		description: metadata.description,
+		image: `${Astro.url.origin}/posts/${entry.slug}/og-image.png`
+	}}
+>
 	<div class="mx-auto w-full max-w-screen-md">
 		<PostHeader
 			title={metadata.title}
