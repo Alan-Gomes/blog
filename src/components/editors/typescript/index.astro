@@ -12,7 +12,7 @@ interface Props {
 const { code, note, tryItNote = '' } = Astro.props;
 ---
 
-<div class="rounded-md bg-[#1e1e1e] p-4">
+<div class="rounded-md bg-[#1e1e1e] p-4 pr-0">
 	<div class="pointer-events-none lg:pointer-events-auto">
 		<TypeScriptEditor code={await formatCode(code)} client:visible />
 	</div>
