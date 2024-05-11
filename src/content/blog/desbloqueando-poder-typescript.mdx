@@ -1,0 +1,220 @@
+---
+title: 'Desbloqueando o Poder do TypeScript'
+pubDate: 2024-05-08
+description: 'Dicas e truques para utilizar o melhor do TypeScript.'
+excerpt: Entenda como escrever tipos que expressem melhor o seu código e o torne mais previsível
+tags: ['typescript']
+---
+
+import TypeScriptEditor from '@/components/editors/typescript/index.astro';
+
+O TypesScript surgiu inicialmente como uma linguagem com o simples propósito de adicionar tipagem em cima do JavaScript.
+Conforme novas versões foram lançadas, ela se tornou cada vez mais poderosa e hoje é capaz de muitas coisas que você talvez não saiba.
+Nesse artigo, vamos entender qual a verdadeira utilidade do TypeScript e como desbloquear o melhor do seu potencial.
+
+Antes de colocar a mão na massa e escrever código, vamos falar um pouco sobre qual os benefícios de uma linguagem tipada.
+Quem já programou JavaScript _puro_ (sem tipagem) sabe que a ausência de tipos remove várias barreiras e torna a escrita do código muito mais prática.
+Entretanto, conforme o tamanho do código cresce e o número de pessoas trabalhando no projeto aumenta, o que antes era um benefício pode se tornar justamente o contrário.
+
+> Apesar desse ponto de vista não ser unânime, o fato do crescimento do TypeScript é um indicativo de que muitos desenvolvedores possuem esse sentimento
+
+## Fases de feedback de problemas
+
+No desenvolvimento de software, geralmente existem 4 fases onde são gerados feedback de problemas, ou seja,
+momentos em que são detectadas falhas no sistema que demandam uma correção.
+Cada fase acontece em um momento diferente e demanda um _custo cognitivo_ maior.
+
+> 💡 "Custo cognitivo" aqui se refere ao custo entre abandonar contexto de uma tarefa e precisar retomar posteriormente,
+> quanto mais tempo passa, mais carga mental pode ser necessária para compreender tudo novamente.
+
+As fases de feedback são:
+
+1. **Compilação**: o código falha ao compilar e isso indica um problema estrutural. Nessa fase, o custo é o menor pois você tem um feedback quase imediato.
+2. **Testes locais/automatizados**: ao executar o código, se identifica uma falha ao atender algum requisito do sistema, seja de forma automatizada ou não.
+   Nessa fase, apesar do feedback não ser imediato, o custo costuma ainda ser baixo.
+3. **Testes do profissional de QA**: após haver uma publicação em um ambiente específico para testes, um profissional de QA valida se os requisitos foram atendidos.
+   Nessa fase, o feedback pode levar desde horas até dias, portanto o custo já é mais elevado.
+4. **Utilização pelo usuário final**: após o lançamento de uma nova versão, o sistema é utilizado pelos seus usuários, que identificam e reportam (ou não) as falhas encontradas durante a utilização.
+   Aqui o custo é altíssimo, considerando ainda que o desenvolvedor que corrige nem sempre é o mesmo que desenvolveu.
+
+Considerando essas fases e o custo de identificar um problema em cada um delas, fica constatado o óbvio: é muito melhor ter erros de compilação do que bugs encontrados pelo usuário final.
+
+## Mão na massa
+
+Agora vamos dar uma olhada em alguns exemplos de como usar o typescript para além de meros tipos simples.
+Cada exemplo mostra uma forma diferente de obter novos tipos, sendo os principais objetivos:
+evitar repetição (quanto maior é a reutilização, mais fácil é identificar efeitos colaterais em mudanças) e aumentar precisão (quanto maior a precisão, menos margem para erros).
+
+1. **Limitando valores possíveis para um parâmetro/variável**: No lugar de especificar um simples argumento `string`, especificamos exatamente quais os valores esperados.
+
+<TypeScriptEditor
+	code={`
+  type Theme = 'light' | 'dark';
+  declare function setTheme(theme: Theme): void;
+  
+  setTheme('light')
+`}
+	tryItNote="Tente trocar o argumento para um valor inválido"
+	note="Além de garantir a segurança de tipos, deixa a informação clara no código"
+/>
+
+2. **Transformando tipos já existentes**: Quando você tem dois ou mais tipos que compartilham estruturas semelhantes,
+   pode ser interessante construir um baseado numa transformação do outro, evitando repetição de código;
+
+<TypeScriptEditor
+	code={`
+  interface Example {
+    quantity: number;
+    name: string;
+    active: boolean;
+  }
+  
+  interface ExtendsExample extends Example {
+    details: object;
+  }
+  
+  type A = Print<ExtendsExample>;
+  
+  interface OmitExample extends Omit<ExtendsExample, 'active'> {}
+  
+  type B = Print<OmitExample>;
+  
+  interface PickExample extends Pick<OmitExample, 'name' | 'details'> {}
+  
+  type C = Print<PickExample>;
+`}
+	tryItNote="Tente adicionar parâmetros nas interfaces"
+	note="Ao alterar uma interface as demais automaticamente propagam as mudanças"
+/>
+
+3. **Derivando tipos a partir de valores constantes**: Quando você tem um objeto com uma estrutura constante,
+   pode ser interessante inferir o tipo dele ao invés de declarar uma interface apenas para isso.
+
+<TypeScriptEditor
+	code={`
+  declare const process: { env: Record<string, string> };
+  const environment = {
+    database: {
+      username: process.env.DB_USERNAME,
+      password: process.env.DB_PASSWORD,
+    },
+  };
+  
+  // Criamos o tipo a partir do valor contido na variável
+  type Environment = typeof environment;
+  //   ^?
+  
+  const fontSizes = {
+    sm: 8,
+    md: 12,
+    lg: 16,
+  };
+  
+  // Extraímos as chaves do objeto e criamos um tipo para elas
+  type Size = keyof typeof fontSizes;
+  //   ^?
+  
+  // Esse tipo garante o entrelaçamento das informações
+  declare function getFontSize(size: Size): number;
+  getFontSize('sm');
+`}
+	tryItNote="Adicione um campo em environment ou remover 'sm' de fontSizes"
+	note="Essa abordagem elimina a necessidade de repetir código em declaração de tipos"
+/>
+
+4. **Derivando tipos a partir do retorno de funções**: Quando você possui uma função que transforma um dado,
+   é possível inferir o retorno e criar um novo tipo a partir disso.
+
+<TypeScriptEditor
+	code={`
+  interface UserDTO {
+    name: string;
+    createdAt: string;
+  }
+  
+  // Criamos uma função simples para transformar os dados do objeto DTO
+  const parseUserDTO = (dto: UserDTO) => ({
+    ...dto,
+    createdAt: new Date(dto.createdAt),
+  });
+  
+  // Criamos um tipo a partir do valor que é retornado pela função
+  type User = ReturnType<typeof parseUserDTO>;
+  //   ^?
+  
+  // Variáveis com esse tipo representarão o objeto que é retornado pela função
+  declare const admin: User;
+  admin.createdAt.getFullYear();
+  //    ^?
+`}
+	tryItNote="Comente a linha que transforma o campo createdAt em Date"
+	note="Nós entrelaçamos o tipo User ao retorno da função, então eles sempre serão coerentes um ao outro"
+/>
+
+5. **Utilizando [generics](https://www.typescriptlang.org/docs/handbook/2/generics.html) para detectar os tipos**:
+   Assim como outras linguagens, o TypeScript também possui generics.
+
+> 💡 Uma forma simples de entender generics no TypeScript é imaginar eles como parâmetros. Assim como funções recebem parâmetros comuns, elas também recebem parâmetros de tipos.
+> Outros tipos também podem aceitar generics, funcionando também como parâmetros.
+
+<TypeScriptEditor
+	code={`
+  /** Não permite informar a chave 'id' */
+  type ExceptId<TKeys> = Exclude<TKeys, 'id'>;
+  
+  // Criamos uma função que recebe um objeto e o nome de uma chave presente no objeto
+  declare function assertProperty<TSource>(
+    source: TSource,
+    key: ExceptId<keyof TSource>
+  ): TSource;
+  
+  const user = { id: 1, name: 'Alan', email: 'test@localhost' };
+  
+  // A função retorna o mesmo tipo do objeto que é fornecido para ela
+  const validUser = assertProperty(user, 'name');
+  //    ^?
+  
+  // Tipos são semelhantes a funções: recebem parâmetros (generics) e retornam outro tipo
+  type NonIdKeys = ExceptId<keyof typeof user>;
+  //   ^?
+`}
+	tryItNote="Altere o parâmetro 'name' ou adicione campos no objeto user"
+	note="Ao utilizar generics nossos tipos se adaptam conforme o parâmetro fornecido"
+/>
+
+6. **Trabalhando com dados constantes**: Quando você tem um objeto ou array constante (não apenas `const`, mas efetivamente constante),
+   o operador `as const` pode tornar os tipos mais específicos.
+
+<TypeScriptEditor
+	code={`
+  declare function say(message: string): void;
+  
+  // Declaramos uma variável efetivamente constante, ou seja, que nunca é alterada
+  const animals = [
+    { kind: 'cat', meow: 'I am a cat!' },
+    { kind: 'cat', meow: 'I am another cat!' },
+    { kind: 'dog', bark: 'I am a dog!' },
+    { kind: 'dog', bark: 'I am another dog!' },
+  ] as const;
+  
+  type AnimalKind = typeof animals[number]['kind'];
+  //   ^?
+  
+  animals.forEach((animal) => {
+    // O TypeScript sabe quais objetos podem entrar em cada if
+    if (animal.kind === 'cat') {
+      say(animal.meow);
+      //         ^?
+    } else {
+      say(animal.bark);
+      //         ^?
+    }
+  });
+`}
+	tryItNote="Remova o operador as const ou adicione outro tipo de animal"
+	note="Quando o TypeScript sabe que o valor é constante, ele pode prever os tipos em cada cenário"
+/>
+
+Esse artigo acaba por aqui. A ideia dele foi te convencer da importância de melhorar os erros em tempo de compilação,
+além de trazer alguns exemplos que sirvam de inspiração quando que você for escrever suas interfaces e types.
+Da próxima vez que for declarar um tipo, utilize um pouco mais de tempo para pensar como implementá-lo de modo mais eficiente. Até mais!

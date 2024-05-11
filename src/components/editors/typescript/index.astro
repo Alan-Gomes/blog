@@ -1,0 +1,35 @@
+---
+import { formatCode } from '@/utils/code';
+import { Icon } from 'astro-icon/components';
+import { TypeScriptEditor } from './editor';
+
+interface Props {
+	code: string;
+	note?: string;
+	tryItNote?: string;
+}
+
+const { code, note, tryItNote = '' } = Astro.props;
+---
+
+<div class="rounded-md bg-[#1e1e1e] p-4">
+	<div class="pointer-events-none lg:pointer-events-auto">
+		<TypeScriptEditor code={await formatCode(code)} client:visible />
+	</div>
+	<div class="mt-2 text-sm text-neutral-300">
+		<div class="hidden lg:block">
+			<Icon name="lucide:lightbulb" class="inline align-baseline" /> Exemplo interativo{
+				tryItNote ? ':' : ''
+			}
+			{tryItNote}
+		</div>
+		{
+			note && (
+				<>
+					<hr class="my-3 hidden lg:block" />
+					<div>{note}</div>
+				</>
+			)
+		}
+	</div>
+</div>

@@ -1,5 +1,15 @@
 declare module 'astro:content' {
 	interface Render {
+		'.mdx': Promise<{
+			Content: import('astro').MarkdownInstance<{}>['Content'];
+			headings: import('astro').MarkdownHeading[];
+			remarkPluginFrontmatter: Record<string, any>;
+		}>;
+	}
+}
+
+declare module 'astro:content' {
+	interface Render {
 		'.md': Promise<{
 			Content: import('astro').MarkdownInstance<{}>['Content'];
 			headings: import('astro').MarkdownHeading[];
@@ -126,6 +136,13 @@ declare module 'astro:content' {
 
 	type ContentEntryMap = {
 		"blog": {
+"desbloqueando-poder-typescript.mdx": {
+	id: "desbloqueando-poder-typescript.mdx";
+  slug: "desbloqueando-poder-typescript";
+  body: string;
+  collection: "blog";
+  data: InferEntrySchema<"blog">
+} & { render(): Render[".mdx"] };
 "react-single-source-of-truth.md": {
 	id: "react-single-source-of-truth.md";
   slug: "react-single-source-of-truth";

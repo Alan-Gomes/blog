@@ -1,4 +1,5 @@
 ---
+import Comments from '@/components/Comments.astro';
 import PostContent from '@/components/PostContent.astro';
 import PostHeader from '@/components/PostHeader.astro';
 import Base from '@/layouts/Base.astro';
@@ -31,5 +32,6 @@ const { Content, remarkPluginFrontmatter } = await entry.render();
 			img={metadata.image && { src: metadata.image?.src, alt: metadata.image?.alt }}
 		/>
 		<PostContent><Content /></PostContent>
+		<Comments slug={entry.slug} />
 	</div>
 </Base>

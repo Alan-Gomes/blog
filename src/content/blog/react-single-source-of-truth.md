@@ -26,7 +26,7 @@ function FruitList() {
 
 	const filter = (newQuery: string) => {
 		setQuery(newQuery);
-		setFilteredFruits(filteredFruits.filter(fruit => !query || fruit.name.includes(query)))
+		setFilteredFruits(filteredFruits.filter((fruit) => !query || fruit.name.includes(query)));
 	};
 
 	return (
@@ -38,7 +38,9 @@ function FruitList() {
 					filter(newValue);
 				}}
 			/>
-			{fruits.map(fruit => <Fruit key={fruit.id} fruit={fruit}>)}
+			{fruits.map((fruit) => (
+				<Fruit key={fruit.id} fruit={fruit} />
+			))}
 		</>
 	);
 }

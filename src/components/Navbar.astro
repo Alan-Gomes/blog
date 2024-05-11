@@ -5,11 +5,16 @@ import Section from './Section.astro';
 <Section>
 	<div class="flex justify-between">
 		<div class="text-3xl font-bold">
-			<a href="/"
-				>💻 <span class="pr-2 text-gray-500">{'<'}</span>Alan<span class="text-orange-600"
-					>'s
-				</span>notes<span class="pl-2 text-2xl text-gray-500">{'/>'}</span></a
-			>
+			<a href="/" class="flex items-center gap-3">
+				<span class="mr-2">💻</span>
+				<span class="text-gray-500">{'<'}</span>
+				<span class="flex">
+					<span>Alan</span>
+					<span class="text-orange-600">'s</span>
+				</span>
+				<span>notes</span>
+				<span class="text-2xl text-gray-500">{'/>'}</span>
+			</a>
 		</div>
 		<div class="flex items-center">
 			<nav>

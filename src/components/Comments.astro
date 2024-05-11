@@ -1,0 +1,35 @@
+---
+interface Props {
+	slug: string;
+}
+
+const { slug } = Astro.props;
+---
+
+<div id="comments-container" data-slug={slug}></div>
+
+<style is:global>
+	iframe:focus-visible {
+		outline: none !important;
+	}
+</style>
+
+<script>
+	const script = document.createElement('script');
+	const container = document.querySelector('#comments-container')! as HTMLElement;
+	const darkMode = document.querySelector('html')?.classList.contains('dark');
+
+	Object.entries({
+		src: 'https://utteranc.es/client.js',
+		repo: 'Alan-Gomes/blog',
+		'issue-term': `Post ${container.dataset.slug}`,
+		label: 'comentarios',
+		theme: darkMode ? 'github-light' : 'github-dark',
+		crossorigin: 'anonymous',
+		async: 'true'
+	}).forEach(([key, value]) => {
+		script.setAttribute(key, value);
+	});
+
+	container.appendChild(script);
+</script>

@@ -1,3 +1,4 @@
+import mdx from '@astrojs/mdx';
 import netlify from '@astrojs/netlify';
 import react from '@astrojs/react';
 import sitemap from '@astrojs/sitemap';
@@ -9,7 +10,9 @@ import {
 import { pluginFramesTexts } from '@expressive-code/plugin-frames';
 import { pluginLineNumbers } from '@expressive-code/plugin-line-numbers';
 import expressiveCode from 'astro-expressive-code';
+import icon from 'astro-icon';
 import { defineConfig } from 'astro/config';
+import rehypeExternalLinks from 'rehype-external-links';
 import { remarkReadingTime } from './src/utils/readingTime';
 
 /** @type {import('astro-expressive-code').AstroExpressiveCodeOptions} */
@@ -31,14 +34,27 @@ pluginCollapsibleSectionsTexts.overrideTexts('pt-BR', {
 	collapsedLines: '{lineCount} {lineCount;1=linha omitida;linhas omitidas}'
 });
 
+/** @type {import('rehype-external-links').Options} */
+const externalLinksOptions = {
+	target: '_blank'
+};
+
 // https://astro.build/config
 export default defineConfig({
 	site: 'https://alangomes.dev/',
 	markdown: {
 		syntaxHighlight: false,
-		remarkPlugins: [remarkReadingTime]
+		remarkPlugins: [remarkReadingTime],
+		rehypePlugins: [[rehypeExternalLinks, externalLinksOptions]]
 	},
-	integrations: [tailwind(), react(), sitemap(), expressiveCode(expressiveCodeOptions)],
+	integrations: [
+		tailwind(),
+		react(),
+		sitemap(),
+		expressiveCode(expressiveCodeOptions),
+		mdx(),
+		icon()
+	],
 	output: 'static',
 	adapter: netlify()
 });
