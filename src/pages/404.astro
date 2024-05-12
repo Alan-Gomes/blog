@@ -1,0 +1,18 @@
+---
+import notFoundImage from '@/assets/404.jpg';
+import Heading from '@/components/Heading.astro';
+import Section from '@/components/Section.astro';
+import Base from '@/layouts/Base.astro';
+import { AppConfig } from '@/utils/AppConfig';
+import { Image } from 'astro:assets';
+
+const { title } = AppConfig;
+const { description } = AppConfig;
+---
+
+<Base head={{ title, description }}>
+	<Section><Heading title="Página não encontrada" /></Section>
+	<div class="mx-auto my-auto w-full max-w-screen-md px-4">
+		<Image src={notFoundImage} alt="404" />
+	</div>
+</Base>
