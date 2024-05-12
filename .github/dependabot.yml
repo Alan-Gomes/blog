@@ -7,6 +7,7 @@ updates:
     assignees:
       - 'Alan-Gomes'
     groups:
-      all:
-        patterns:
-          - '*'
+      production-dependencies:
+        dependency-type: 'production'
+      development-dependencies:
+        dependency-type: 'development'
