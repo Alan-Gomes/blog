@@ -6,6 +6,7 @@ updates:
       interval: 'daily'
     assignees:
       - 'Alan-Gomes'
+    versioning-strategy: increase
     groups:
       production-dependencies:
         dependency-type: 'production'
