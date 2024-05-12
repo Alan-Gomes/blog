@@ -2,19 +2,15 @@
 import Hero from '@/components/Hero.astro';
 import LatestPosts from '@/components/LatestPosts.astro';
 import Base from '@/layouts/Base.astro';
-import { AppConfig } from '@/utils/AppConfig';
 import { sortPostsByDate } from '@/utils/data.util';
 import { getCollection } from 'astro:content';
-
-const { title } = AppConfig;
-const { description } = AppConfig;
 
 const allPosts = await getCollection('blog');
 allPosts.sort(sortPostsByDate);
 const latestPosts = allPosts.slice(0, 3);
 ---
 
-<Base head={{ title, description }}>
+<Base>
 	<Hero />
 	<LatestPosts posts={latestPosts} />
 </Base>

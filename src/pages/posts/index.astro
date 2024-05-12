@@ -3,18 +3,14 @@ import Card from '@/components/Card.astro';
 import Heading from '@/components/Heading.astro';
 import Section from '@/components/Section.astro';
 import Base from '@/layouts/Base.astro';
-import { AppConfig } from '@/utils/AppConfig';
 import { sortPostsByDate } from '@/utils/data.util';
 import { getCollection } from 'astro:content';
-
-const { title } = AppConfig;
-const { description } = AppConfig;
 
 const allPosts = await getCollection('blog');
 allPosts.sort(sortPostsByDate);
 ---
 
-<Base head={{ title, description }}>
+<Base head={{ title: 'Publicações' }}>
 	<Section><Heading title="Posts" /></Section>
 	<Section>
 		{

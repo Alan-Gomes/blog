@@ -5,23 +5,23 @@ import { AppConfig } from '@/utils/AppConfig';
 import '@fontsource/ia-writer-mono';
 
 export interface Props {
-	head: {
-		title: string;
-		description: string;
+	head?: {
+		title?: string;
+		description?: string;
 		image?: string;
 	};
 }
 
-const {
-	head: { title, description, image }
-} = Astro.props as Props;
+const { title: siteTitle } = AppConfig;
+
+const { head: { title, description = AppConfig.description, image } = {} } = Astro.props as Props;
 ---
 
 <html lang="en">
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>{title}</title>
+		<title>{title ? `${title} | ${siteTitle}` : siteTitle}</title>
 		<meta name="description" content={description} />
 		{image && <meta name="og:image" content={image} />}
 		<meta name="author" content={AppConfig.author} />

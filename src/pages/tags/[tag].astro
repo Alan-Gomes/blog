@@ -3,7 +3,6 @@ import Card from '@/components/Card.astro';
 import Heading from '@/components/Heading.astro';
 import Section from '@/components/Section.astro';
 import Base from '@/layouts/Base.astro';
-import { AppConfig } from '@/utils/AppConfig';
 import { CollectionEntry, getCollection } from 'astro:content';
 
 export async function getStaticPaths(): Promise<any> {
@@ -24,13 +23,10 @@ interface Props {
 }
 
 const { tag } = Astro.params;
-const title = AppConfig.title;
-const description = AppConfig.description;
-
 const { posts } = Astro.props;
 ---
 
-<Base head={{ title, description }}>
+<Base head={{ title: `#${tag}` }}>
 	<Section>
 		<Heading title={`Posts com a tag #${tag}`} />
 	</Section>

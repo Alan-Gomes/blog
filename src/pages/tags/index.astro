@@ -3,18 +3,14 @@ import Heading from '@/components/Heading.astro';
 import Section from '@/components/Section.astro';
 import Tags from '@/components/Tags.astro';
 import Base from '@/layouts/Base.astro';
-import { AppConfig } from '@/utils/AppConfig';
 import { getCollection } from 'astro:content';
-
-const { title } = AppConfig;
-const { description } = AppConfig;
 
 const collection = await getCollection('blog');
 
 const allTags = new Set(collection.map((post) => post.data.tags).flat());
 ---
 
-<Base head={{ title, description }}>
+<Base head={{ title: 'Tags' }}>
 	<Section><Heading title="Tags" /></Section>
 	<div class="mx-auto w-full max-w-screen-md">
 		<Tags tags={[...allTags]} withHref={true} />
