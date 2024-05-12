@@ -15,7 +15,7 @@
 		"@astrojs/netlify": "^5.2.0",
 		"@astrojs/react": "^3.3.0",
 		"@astrojs/rss": "^4.0.5",
-		"@astrojs/sitemap": "^3.1.2",
+		"@astrojs/sitemap": "^3.1.4",
 		"@astrojs/tailwind": "^5.1.0",
 		"@expressive-code/plugin-collapsible-sections": "^0.35.3",
 		"@expressive-code/plugin-line-numbers": "^0.35.3",
