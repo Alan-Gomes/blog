@@ -1,8 +1,12 @@
 version: 2
 updates:
-  - package-ecosystem: "npm"
-    directory: "/"
+  - package-ecosystem: 'npm'
+    directory: '/'
     schedule:
-      interval: "daily"
+      interval: 'daily'
     assignees:
-      - "Alan-Gomes"
+      - 'Alan-Gomes'
+    groups:
+      all:
+        patterns:
+          - '*'
