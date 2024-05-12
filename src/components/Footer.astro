@@ -1,4 +1,5 @@
 ---
+import { Icon } from 'astro-icon/components';
 import Section from './Section.astro';
 
 const year = new Date();
@@ -6,6 +7,8 @@ const year = new Date();
 
 <Section>
 	<footer class="text-center">
-		© {year.getFullYear()}
+		© {year.getFullYear()} - <a href="mailto:contato@alangomes.dev" target="_blank">
+			<Icon name="lucide:mail" class="inline" /> contato@alangomes.dev
+		</a>
 	</footer>
 </Section>
