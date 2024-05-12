@@ -9,6 +9,7 @@ import {
 } from '@expressive-code/plugin-collapsible-sections';
 import { pluginFramesTexts } from '@expressive-code/plugin-frames';
 import { pluginLineNumbers } from '@expressive-code/plugin-line-numbers';
+import playformCompress from '@playform/compress';
 import expressiveCode from 'astro-expressive-code';
 import icon from 'astro-icon';
 import { defineConfig } from 'astro/config';
@@ -53,7 +54,8 @@ export default defineConfig({
 		sitemap(),
 		expressiveCode(expressiveCodeOptions),
 		mdx(),
-		icon()
+		icon(),
+		playformCompress()
 	],
 	output: 'static',
 	adapter: netlify()
