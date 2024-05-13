@@ -1,5 +1,4 @@
 import mdx from '@astrojs/mdx';
-import netlify from '@astrojs/netlify';
 import react from '@astrojs/react';
 import sitemap from '@astrojs/sitemap';
 import tailwind from '@astrojs/tailwind';
@@ -58,7 +57,6 @@ export default defineConfig({
 		playformCompress()
 	],
 	output: 'static',
-	adapter: netlify(),
 	prefetch: {
 		prefetchAll: true
 	}
