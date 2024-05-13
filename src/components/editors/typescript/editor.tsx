@@ -59,7 +59,7 @@ export function TypeScriptEditor({ code: initialCode }: TypescriptEditorProps) {
 	return (
 		<div className="relative">
 			{code !== initialCode && (
-				<div className="absolute right-0 top-0 z-10 text-sm">
+				<div className="absolute right-0 top-0 z-10 pr-4 text-sm">
 					<button onClick={() => setCode(initialCode)}>Reiniciar</button>
 				</div>
 			)}
