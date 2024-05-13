@@ -58,5 +58,8 @@ export default defineConfig({
 		playformCompress()
 	],
 	output: 'static',
-	adapter: netlify()
+	adapter: netlify(),
+	prefetch: {
+		prefetchAll: true
+	}
 });
