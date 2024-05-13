@@ -1,11 +1,12 @@
-import { createTypeInlayProvider } from '@/components/editors/typescript/type-inlay';
+import { createTypeInlayProvider } from '@/components/editors/type-inlay';
+import { useIsDarkMode } from '@/utils/dark-mode';
 import { Editor, Monaco, OnMount } from '@monaco-editor/react';
-import { nanoid } from 'nanoid';
 import { useState } from 'react';
 
 import.meta.hot?.accept(() => location.reload());
 
 interface TypescriptEditorProps {
+	path: string;
 	code: string;
 }
 
@@ -39,11 +40,11 @@ const clampHeight = (height: number) => Math.max(minHeight, height);
 
 const estimateHeight = (code: string) => clampHeight(code.split('\n').length * estimatedLineHeight);
 
-export function TypeScriptEditor({ code: initialCode }: TypescriptEditorProps) {
+export function TypeScriptEditor({ path, code: initialCode }: TypescriptEditorProps) {
 	const [code, setCode] = useState(initialCode);
-	const [id] = useState(nanoid);
-	const path = `/examples-${id}.ts`;
 	const [height, setHeight] = useState(() => estimateHeight(code));
+
+	const darkMode = useIsDarkMode();
 
 	const onMount: OnMount = (editor, monaco) => {
 		initializeLanguage(monaco);
@@ -59,13 +60,13 @@ export function TypeScriptEditor({ code: initialCode }: TypescriptEditorProps) {
 	return (
 		<div className="relative">
 			{code !== initialCode && (
-				<div className="absolute right-0 top-0 z-10 pr-4 text-sm">
+				<div className="absolute right-0 top-0 z-10 pr-4">
 					<button onClick={() => setCode(initialCode)}>Reiniciar</button>
 				</div>
 			)}
 			<Editor
 				defaultLanguage="typescript"
-				theme="vs-dark"
+				theme={darkMode ? 'vs-dark' : 'light'}
 				value={code}
 				onChange={(value) => setCode(value || '')}
 				height={height}

@@ -1,4 +1,6 @@
 ---
+import { UtterancesComments } from '@/components/UtterancesComments';
+
 interface Props {
 	slug: string;
 }
@@ -6,29 +8,12 @@ interface Props {
 const { slug } = Astro.props;
 ---
 
-<div id="comments-container" class="min-h-64" data-slug={slug}></div>
+<div class="min-h-64">
+	<UtterancesComments slug={slug} client:load />
+</div>
 
 <style is:global>
 	iframe:focus-visible {
 		outline: none !important;
 	}
 </style>
-
-<script>
-	const script = document.createElement('script');
-	const container = document.querySelector('#comments-container')! as HTMLElement;
-	const darkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
-
-	Object.entries({
-		src: 'https://utteranc.es/client.js',
-		repo: 'Alan-Gomes/blog',
-		'issue-term': `Post ${container.dataset.slug}`,
-		label: 'comentarios',
-		theme: darkMode ? 'github-dark' : 'github-light',
-		crossorigin: 'anonymous'
-	}).forEach(([key, value]) => {
-		script.setAttribute(key, value);
-	});
-
-	container.appendChild(script);
-</script>

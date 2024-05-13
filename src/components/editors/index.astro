@@ -1,6 +1,7 @@
 ---
 import { formatCode } from '@/utils/code';
 import { Icon } from 'astro-icon/components';
+import { nanoid } from 'nanoid';
 import { TypeScriptEditor } from './editor';
 
 interface Props {
@@ -10,13 +11,16 @@ interface Props {
 }
 
 const { code, note, tryItNote = '' } = Astro.props;
+const path = `/examples-${nanoid()}.ts`;
 ---
 
-<div class="rounded-md bg-[#1e1e1e] p-4 pr-0">
+<div
+	class="rounded-md bg-white p-4 pr-0 text-sm text-neutral-950 dark:bg-[#1e1e1e] dark:text-neutral-300"
+>
 	<div class="pointer-events-none lg:pointer-events-auto">
-		<TypeScriptEditor code={await formatCode(code)} client:visible />
+		<TypeScriptEditor code={await formatCode(code)} path={path} client:visible />
 	</div>
-	<div class="mt-2 text-sm text-neutral-300">
+	<div class="mt-2 pr-4">
 		<div class="hidden lg:block">
 			<Icon name="lucide:lightbulb" class="inline align-baseline" /> Exemplo interativo{
 				tryItNote ? ':' : ''
