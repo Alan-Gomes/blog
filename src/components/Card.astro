@@ -7,8 +7,6 @@ interface Props {
 }
 
 const { post } = Astro.props;
-
-const { remarkPluginFrontmatter } = await post.render();
 ---
 
 <a href={`/posts/${post.slug}`}>
@@ -26,16 +24,17 @@ const { remarkPluginFrontmatter } = await post.render();
     dark:bg-stone-800
 		dark:text-white"
 		>
-			<div class="flex-auto">
-				<div class="flex justify-between pb-4 text-xs">
+			<div class="flex flex-auto flex-col gap-4">
+				<div class="flex justify-between text-xs">
 					<p>{formatDate(post.data.pubDate)}</p>
-					<p>{remarkPluginFrontmatter.minutesRead}</p>
 				</div>
 
-				<p class="pb-4 text-lg font-bold">{post.data.title}</p>
+				<p class="text-balance text-lg font-bold">{post.data.title}</p>
 
 				<Tags tags={post.data.tags} />
-				<p class="line-clamp-6 pt-4">{post.data.excerpt}</p>
+				<p class="mt-auto">
+					{post.data.excerpt ?? post.data.description}
+				</p>
 			</div>
 			<p class="pt-4 underline">leia mais →</p>
 		</div>

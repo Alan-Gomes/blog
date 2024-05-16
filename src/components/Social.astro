@@ -1,9 +1,10 @@
 ---
 interface Props {
 	href: string;
+	label: string;
 }
 
-const { href } = Astro.props;
+const { href, label } = Astro.props;
 ---
 
 <div
@@ -11,6 +12,8 @@ const { href } = Astro.props;
 >
 	<a
 		href={href}
+		title={label}
+		aria-label={label}
 		target="_blank"
 		class="flex h-full w-full items-center justify-center rounded-[0.7rem] bg-stone-300
 		p-4

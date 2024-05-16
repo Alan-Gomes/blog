@@ -6,7 +6,6 @@ import Tags from './Tags.astro';
 interface Props {
 	title: string;
 	tags: string[];
-	minutesRead: string;
 	pubDate: Date;
 	img?: {
 		src: string;
@@ -14,7 +13,7 @@ interface Props {
 	};
 }
 
-const { title, pubDate, tags, minutesRead, img } = Astro.props;
+const { title, pubDate, tags, img } = Astro.props;
 
 const formattedDate = formatDate(pubDate);
 ---
@@ -26,7 +25,7 @@ const formattedDate = formatDate(pubDate);
 			<Tags tags={tags} withHref={true} />
 		</div>
 		<div class="text-sm">
-			<span>{formattedDate}</span> - <span>{minutesRead}</span>
+			Escrito em {formattedDate}
 		</div>
 
 		{img?.src ? <img src={img.src} alt={img.alt} /> : null}

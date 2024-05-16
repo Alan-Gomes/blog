@@ -1,9 +1,9 @@
 ---
-title: 'Single Source of Truth em componentes React'
+title: Single Source of Truth em componentes React
 pubDate: 2024-05-05
-description: 'Como escrever componentes mais fáceis de manter e mais simples de entender.'
-excerpt: Neste artigo irei explicar o que é Single Source of Truth e como ele pode ser utilizado para prevenir possíveis bugs e ainda melhorar a legibilidade dos seus componentes.
-tags: ['react', 'javascript', 'typescript', 'patterns']
+description: Como escrever componentes mais fáceis de manter e mais simples de entender
+excerpt: Entenda o que é Single Source of Truth e como ele pode ser utilizado para prevenir possíveis bugs e ainda melhorar a legibilidade dos seus componentes
+tags: [react, javascript, typescript, patterns]
 ---
 
 Neste artigo irei explicar o que é _Single Source of Truth_ e como ele pode ser utilizado para prevenir possíveis bugs e ainda melhorar a legibilidade dos seus componentes.

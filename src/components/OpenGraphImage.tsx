@@ -1,3 +1,4 @@
+import { Logo } from '@/components/Logo';
 import { CollectionEntry } from 'astro:content';
 import { ComponentProps, PropsWithChildren } from 'react';
 
@@ -6,15 +7,25 @@ interface OpenGraphImageProps {
 }
 
 export function OpenGraphImage({ post }: OpenGraphImageProps) {
-	const backgroundImage = 'linear-gradient(60deg, #29323c 0%, #485563 100%)';
+	const backgroundImage =
+		'linear-gradient(111.1deg, rgb(0, 40, 70) -4.8%, rgb(255, 115, 115) 82.7%, rgb(255, 175, 123) 97.2%)';
 
 	return (
 		<Flex
-			style={{ width: '100%', height: '100%', padding: '2rem', color: 'white', backgroundImage }}
+			style={{
+				width: '100%',
+				height: '100%',
+				padding: '2rem',
+				color: 'white',
+				fontSize: '24px',
+				backgroundImage
+			}}
 		>
+			<div style={{ height: '1rem' }} />
 			<Header />
 			<Footer>
 				<Title>{post.data.title}</Title>
+				<div style={{ height: '1rem' }} />
 				<Description>{post.data.description}</Description>
 			</Footer>
 		</Flex>
@@ -22,14 +33,9 @@ export function OpenGraphImage({ post }: OpenGraphImageProps) {
 }
 
 function Header() {
-	const arrowColor = 'rgb(107 114 128)';
-	const margin = '0.5rem';
-
 	return (
 		<h2 style={{ margin: 0 }}>
-			<span style={{ color: arrowColor, marginRight: margin }}>{'<'}</span>
-			Alan<span style={{ color: 'rgb(234 88 12)', marginRight: margin }}>'s</span> Notes
-			<span style={{ color: arrowColor, marginLeft: margin }}>{'>'}</span>
+			<Logo />
 		</h2>
 	);
 }
@@ -39,19 +45,11 @@ function Footer({ children }: PropsWithChildren) {
 }
 
 function Title({ children }: PropsWithChildren) {
-	return (
-		<h1 style={{ display: 'block', textOverflow: 'ellipsis', lineClamp: 1, marginBottom: 0 }}>
-			{children}
-		</h1>
-	);
+	return <h1 style={{ display: 'block', textWrap: 'balance', marginBottom: 0 }}>{children}</h1>;
 }
 
 function Description({ children }: PropsWithChildren) {
-	return (
-		<h3 style={{ display: 'block', textOverflow: 'ellipsis', lineClamp: 2, maxWidth: '80%' }}>
-			{children}
-		</h3>
-	);
+	return <p style={{ display: 'block', textWrap: 'balance', maxWidth: '80%' }}>{children}</p>;
 }
 
 function Flex({ style, ...props }: ComponentProps<'div'>) {

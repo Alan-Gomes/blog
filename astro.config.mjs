@@ -9,11 +9,11 @@ import {
 import { pluginFramesTexts } from '@expressive-code/plugin-frames';
 import { pluginLineNumbers } from '@expressive-code/plugin-line-numbers';
 import playformCompress from '@playform/compress';
+import critters from 'astro-critters';
 import expressiveCode from 'astro-expressive-code';
 import icon from 'astro-icon';
 import { defineConfig } from 'astro/config';
 import rehypeExternalLinks from 'rehype-external-links';
-import { remarkReadingTime } from './src/utils/readingTime';
 
 /** @type {import('astro-expressive-code').AstroExpressiveCodeOptions} */
 const expressiveCodeOptions = {
@@ -44,7 +44,6 @@ export default defineConfig({
 	site: 'https://alangomes.dev/',
 	markdown: {
 		syntaxHighlight: false,
-		remarkPlugins: [remarkReadingTime],
 		rehypePlugins: [[rehypeExternalLinks, externalLinksOptions]]
 	},
 	integrations: [
@@ -54,6 +53,7 @@ export default defineConfig({
 		expressiveCode(expressiveCodeOptions),
 		mdx(),
 		icon(),
+		critters(),
 		playformCompress()
 	],
 	output: 'static',

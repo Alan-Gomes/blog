@@ -9,7 +9,7 @@ const { tags, withHref } = Astro.props;
 
 <div class="flex flex-wrap">
 	{
-		tags.map((tag: string) => {
+		tags.map((tag) => {
 			const element = (
 				<span class="mb-2 mr-2 rounded-xl bg-stone-600 px-3 py-1 text-xs font-bold uppercase text-white hover:bg-stone-500">
 					#{tag}

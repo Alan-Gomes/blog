@@ -9,7 +9,7 @@ const { slug } = Astro.props;
 ---
 
 <div class="min-h-64">
-	<UtterancesComments slug={slug} client:load />
+	<UtterancesComments slug={slug} client:visible />
 </div>
 
 <style is:global>

@@ -1,4 +1,5 @@
 ---
+import { Logo } from './Logo';
 import Section from './Section.astro';
 ---
 
@@ -7,13 +8,7 @@ import Section from './Section.astro';
 		<div class="text-3xl font-bold">
 			<a href="/" class="flex items-center gap-3">
 				<span class="mr-2">💻</span>
-				<span class="text-gray-500">{'<'}</span>
-				<span class="flex">
-					<span>Alan</span>
-					<span class="text-orange-600">'s</span>
-				</span>
-				<span>notes</span>
-				<span class="text-2xl text-gray-500">{'/>'}</span>
+				<Logo />
 			</a>
 		</div>
 		<div class="flex items-center">
